@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-primary: #1337ec;
+  --color-background-light: #f6f6f8;
+  --color-background-dark: #101322;
+  --font-display: var(--font-inter);
+}
+
+/* Base styles to match HTML body class */
+@layer base {
+  body {
+    @apply bg-background-light text-slate-900 font-display antialiased transition-colors duration-300 dark:bg-background-dark dark:text-slate-100;
+  }
+}

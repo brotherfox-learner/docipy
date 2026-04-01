@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Knowledge Base - Authentication</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1337ec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101322",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Navigation Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 lg:px-40 py-4 bg-white dark:bg-background-dark/50 backdrop-blur-sm sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-10 rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined">psychology</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">AI Knowledge Base</h2>
+</div>
+<div class="flex items-center gap-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" href="#">Documentation</a>
+</div>
+</header>
+<main class="flex-1 flex items-center justify-center p-6 lg:p-12">
+<div class="w-full max-w-[1000px] grid grid-cols-1 lg:grid-cols-2 bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-2xl shadow-primary/5 border border-slate-200 dark:border-slate-800">
+<!-- Left Side: Login Form -->
+<div class="p-8 lg:p-12 flex flex-col justify-center">
+<div class="mb-8">
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 mb-2">Welcome Back</h1>
+<p class="text-slate-500 dark:text-slate-400">Sign in to access your intelligent neural workspace.</p>
+</div>
+<!-- Social Auth -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<button class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors font-medium text-sm">
+<img alt="Google Logo" class="w-5 h-5" data-alt="Google logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkYyD8EwQbm8nJOgKcc6naEQp-MTDAQW5r4AWzSJY57-2mITlFCHxEUI7_s62ufcFQrmgbGQSWRj5menJt14L6pWkV0QxotGhHrn-pAIj8lUj7M5ZOfERHXtFhV54gxBkBVSqpvMvF2ZnOOensdOlzHrZ-BXD0uAxSSCuISBwlamMy-IJ_qIEiyEeZoKNF0NUjyWrcdSXclftQj_IbQPgzTFoHLGtvYgXUzVzB2oLZhg4LaGn0iSntLDWBJ2u3IK0p0kqNoAd6cAs"/>
+                                Google
+                            </button>
+<button class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors font-medium text-sm">
+<span class="material-symbols-outlined text-xl">terminal</span>
+                                GitHub
+                            </button>
+</div>
+<div class="relative mb-8">
+<div class="absolute inset-0 flex items-center"><span class="w-full border-t border-slate-200 dark:border-slate-700"></span></div>
+<div class="relative flex justify-center text-xs uppercase"><span class="bg-white dark:bg-slate-900 px-2 text-slate-500">Or continue with email</span></div>
+</div>
+<!-- Form Fields -->
+<form class="space-y-5">
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Email Address</label>
+<input class="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-400" placeholder="name@company.com" type="email"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Password</label>
+<a class="text-xs font-medium text-primary hover:underline" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-400" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600" type="button">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+</div>
+<button class="w-full h-12 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-all transform active:scale-[0.98] shadow-lg shadow-primary/20" type="submit">
+                                Sign In
+                            </button>
+</form>
+<p class="mt-8 text-center text-sm text-slate-500">
+                            Don't have an account? 
+                            <a class="font-bold text-primary hover:underline" href="#">Create an account</a>
+</p>
+</div>
+<!-- Right Side: Decorative/Value Prop -->
+<div class="hidden lg:flex flex-col justify-between p-12 bg-primary relative overflow-hidden text-white">
+<!-- Abstract Background Pattern -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" data-alt="Abstract white dot pattern on blue background" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+<div class="relative z-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+<span class="size-2 bg-green-400 rounded-full"></span>
+                                Now powered by GPT-4o
+                            </div>
+<h2 class="text-4xl font-black leading-tight mb-6">The future of collective intelligence.</h2>
+<p class="text-primary-100/80 text-lg leading-relaxed max-w-sm">
+                                Centralize your company's knowledge with our enterprise-grade AI engine. Instant answers, smart synthesis, and global search.
+                            </p>
+</div>
+<div class="relative z-10 bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+<div class="flex items-center gap-4 mb-4">
+<div class="size-10 rounded-full bg-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div>
+<p class="font-bold text-sm">Smart Summary</p>
+<p class="text-xs text-white/60">Generated 2m ago</p>
+</div>
+</div>
+<p class="text-sm leading-relaxed text-white/90">
+                                "Our analysis of the Q3 reports suggests a 24% increase in operational efficiency after implementing the new vector database structure..."
+                            </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Registration View (Hidden by Default/Conceptual) -->
+<!-- To toggle, you would show this instead of the login form -->
+<section class="hidden flex-1 flex items-center justify-center p-6 lg:p-12">
+<!-- Similar structure for Register -->
+</section>
+<footer class="px-6 lg:px-40 py-8 text-center">
+<p class="text-slate-500 dark:text-slate-500 text-xs">
+                    © 2024 AI Knowledge Base Inc. All rights reserved. 
+                    <span class="mx-2">•</span>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<span class="mx-2">•</span>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</p>
+</footer>
+</div>
+</div>
+</body></html>
