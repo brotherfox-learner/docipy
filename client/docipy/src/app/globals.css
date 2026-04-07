@@ -3,15 +3,40 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-primary: #1337ec;
-  --color-background-light: #f6f6f8;
-  --color-background-dark: #101322;
-  --font-display: var(--font-inter);
+  --color-primary: #315efb;
+  --color-background-light: #f4f7fb;
+  --color-background-dark: #060b16;
+  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-inter);
 }
 
 /* Base styles to match HTML body class */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background-light text-slate-900 font-display antialiased transition-colors duration-300 dark:bg-background-dark dark:text-slate-100;
+    @apply bg-background-light font-sans text-slate-900 antialiased transition-colors duration-300 dark:bg-background-dark dark:text-slate-100;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+    background-position: center;
+    background-size: 72px 72px;
+    mask-image: radial-gradient(circle at center, black 30%, transparent 78%);
   }
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/lib/auth-context";
@@ -10,9 +10,15 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "AI Knowledge Base - Transform Your Documents",
-  description: "Turn documents into structured knowledge with AI. Upload PDF, doc, or link and let AI transform them.",
+  title: "Docipy - Turn Documents into Structured Knowledge",
+  description:
+    "Docipy transforms PDFs, docs, and links into summaries, study tools, knowledge graphs, and searchable answers with AI.",
 };
 
 export default function RootLayout({
@@ -32,7 +38,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${inter.variable} min-h-screen flex flex-col`}>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} min-h-screen flex flex-col`}
+      >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             <SessionGate>{children}</SessionGate>
