@@ -150,6 +150,12 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
             |
           </span>
           <Link
+            href={`/documents/${id}/learn`}
+            className="font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors"
+          >
+            Learn
+          </Link>
+          <Link
             href={`/documents/${id}/chat`}
             className="font-semibold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors"
           >
@@ -183,6 +189,15 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
               {doc.word_count.toLocaleString()} words · Updated {new Date(doc.updated_at).toLocaleString()}
             </p>
+            <Link
+              href={`/documents/${id}/learn`}
+              className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors"
+            >
+              <span className="material-symbols-outlined text-lg" aria-hidden>
+                school
+              </span>
+              Start learning path
+            </Link>
           </div>
           <button
             type="button"

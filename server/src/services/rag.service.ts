@@ -228,7 +228,11 @@ export async function findRelevantChunks(
   return rows.map((r) => r.chunk_text)
 }
 
-async function answerFromFullDocumentExcerpt(documentId: string, question: string): Promise<string> {
+async function answerFromFullDocumentExcerpt(
+  documentId: string,
+  question: string,
+  lessonContext?: string
+): Promise<string> {
   let rows: { content: string }[]
   try {
     const res = await pool.query<{ content: string }>(
@@ -257,6 +261,11 @@ async function answerFromFullDocumentExcerpt(documentId: string, question: strin
     return formatGeminiFailure(e)
   }
 
+  const lessonBlock =
+    lessonContext && lessonContext.trim()
+      ? `Learner context (current lesson):\n"""\n${lessonContext.trim().slice(0, 4000)}\n"""\n\n`
+      : ''
+
   const prompt = `You are a helpful assistant. Answer ONLY using information from the document below. If the answer is not in the document, say you cannot find it in the document.
 
 Document:
@@ -264,7 +273,7 @@ Document:
 ${excerpt}
 """
 
-Question: ${question.trim()}
+${lessonBlock}Question: ${question.trim()}
 
 Answer concisely in plain text.`
 
@@ -282,7 +291,11 @@ Answer concisely in plain text.`
 }
 
 // ── RAG Chat ────────────────────────────────────────────────
-export async function ragChat(documentId: string, question: string): Promise<string> {
+export async function ragChat(
+  documentId: string,
+  question: string,
+  opts?: { lessonContext?: string }
+): Promise<string> {
   const genAI = getGenAI()
 
   let relevantChunks: string[] = []
@@ -294,8 +307,13 @@ export async function ragChat(documentId: string, question: string): Promise<str
     console.warn('[RAG] embed/search failed, using full-document fallback:', e)
   }
 
+  const lessonBlock =
+    opts?.lessonContext && opts.lessonContext.trim()
+      ? `\nLearner context (current lesson — use to stay on topic and tailor tone; still ground answers in the document):\n"""\n${opts.lessonContext.trim().slice(0, 4000)}\n"""\n\n`
+      : ''
+
   if (relevantChunks.length === 0) {
-    return answerFromFullDocumentExcerpt(documentId, question)
+    return answerFromFullDocumentExcerpt(documentId, question, opts?.lessonContext)
   }
 
   const context = relevantChunks.join('\n\n---\n\n')
@@ -312,7 +330,7 @@ Document Context:
 ${context.slice(0, 24000)}
 """
 
-User Question: ${question.trim()}
+${lessonBlock}User Question: ${question.trim()}
 
 Answer:
 `
@@ -327,7 +345,7 @@ Answer:
     console.warn('[RAG] generateContent failed on retrieved context, trying full-document path:', e)
   }
 
-  return answerFromFullDocumentExcerpt(documentId, question)
+  return answerFromFullDocumentExcerpt(documentId, question, opts?.lessonContext)
 }
 
 // ── Chat history ────────────────────────────────────────────

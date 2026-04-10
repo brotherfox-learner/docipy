@@ -36,6 +36,11 @@ export function Sidebar() {
         ? (
             [
                 {
+                    href: `/documents/${documentContextId}/learn`,
+                    icon: "school",
+                    label: "Learn",
+                },
+                {
                     href: `/documents/${documentContextId}/chat`,
                     icon: "forum",
                     label: "Chat",

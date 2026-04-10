@@ -10,6 +10,10 @@ import { ChatMarkdown } from "@/components/ChatMarkdown";
 export type ChatPanelProps = {
   documentId: string;
   documentTitle: string;
+  /** Optional context passed to RAG (e.g. current lesson title and summary). */
+  lessonContext?: string | null;
+  footerLinkHref?: string;
+  footerLinkLabel?: string;
 };
 
 type ChatTurn = {
@@ -90,7 +94,13 @@ function UserAvatarBubble() {
   );
 }
 
-export function ChatPanel({ documentId, documentTitle }: ChatPanelProps) {
+export function ChatPanel({
+  documentId,
+  documentTitle,
+  lessonContext,
+  footerLinkHref,
+  footerLinkLabel,
+}: ChatPanelProps) {
   const [input, setInput] = useState("");
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [sending, setSending] = useState(false);
@@ -145,7 +155,10 @@ export function ChatPanel({ documentId, documentTitle }: ChatPanelProps) {
     try {
       const { data } = await api.post(
         `/api/documents/${documentId}/chat`,
-        { question },
+        {
+          question,
+          ...(lessonContext?.trim() ? { context: lessonContext.trim().slice(0, 5000) } : {}),
+        },
         { timeout: 120000 }
       );
       const payload = data.data as { question: string; answer: string };
@@ -182,10 +195,13 @@ export function ChatPanel({ documentId, documentTitle }: ChatPanelProps) {
   const bubbleAssistant =
     "max-w-[min(100%,22rem)] sm:max-w-[min(100%,26rem)] px-4 py-3 rounded-2xl rounded-bl-md bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-sm ring-1 ring-slate-200/80 dark:ring-slate-700/80";
 
+  const editHref = footerLinkHref ?? `/documents/${documentId}`;
+  const editLabel = footerLinkLabel ?? "Edit document";
+
   return (
-    <>
+    <div className="flex flex-col flex-1 min-h-0 relative h-full">
       <section
-        className="flex-1 overflow-y-auto scroll-smooth pb-36 pt-2"
+        className="flex-1 overflow-y-auto scroll-smooth pb-36 pt-2 min-h-0"
         aria-label="Chat messages"
       >
         {/* ส่วนบนสุดของการแสดงผลของการค้นหา */}
@@ -297,10 +313,10 @@ export function ChatPanel({ documentId, documentTitle }: ChatPanelProps) {
                 </span>
               </div>
               <Link
-                href={`/documents/${documentId}`}
+                href={editHref}
                 className="text-[10px] font-semibold text-primary hover:underline shrink-0"
               >
-                Edit document
+                {editLabel}
               </Link>
             </div>
           </form>
@@ -309,6 +325,6 @@ export function ChatPanel({ documentId, documentTitle }: ChatPanelProps) {
           </p>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

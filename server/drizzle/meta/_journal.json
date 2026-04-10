@@ -15,6 +15,13 @@
       "when": 1774283890943,
       "tag": "0001_smooth_puppet_master",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775000000000,
+      "tag": "0002_learning_paths",
+      "breakpoints": true
     }
   ]
 }

@@ -344,12 +344,16 @@ export async function listChatHistory(request: FastifyRequest, reply: FastifyRep
 export async function chatWithDocument(request: FastifyRequest, reply: FastifyReply) {
   const user = (request as AuthenticatedRequest).user
   const { id } = request.params as { id: string }
-  const body = request.body as { question?: string }
+  const body = request.body as { question?: string; context?: string }
 
   const question = body?.question?.trim()
   if (!question) {
     return reply.status(400).send({ statusCode: 400, message: 'Question is required' })
   }
+  const lessonContext =
+    typeof body?.context === 'string' && body.context.trim().length > 0
+      ? body.context.trim().slice(0, 5000)
+      : undefined
 
   const { allowed } = await checkAIQueryLimit(user.id, user.plan)
   if (!allowed) {
@@ -360,7 +364,7 @@ export async function chatWithDocument(request: FastifyRequest, reply: FastifyRe
   if (!doc) return
 
   try {
-    const answer = await ragChat(id, question)
+    const answer = await ragChat(id, question, lessonContext ? { lessonContext } : undefined)
 
     await pool.query(
       `INSERT INTO ai_queries (user_id, document_id, question, answer)

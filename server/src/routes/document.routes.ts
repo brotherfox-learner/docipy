@@ -4,6 +4,7 @@ import { planGuard } from '@/middlewares/planGuard'
 import * as ctrl from '@/controllers/document.controller'
 import * as aiCtrl from '@/controllers/ai.controller'
 import * as flashCtrl from '@/controllers/flashcard.controller'
+import * as lessonCtrl from '@/controllers/lesson.controller'
 
 export async function documentRoutes(app: FastifyInstance) {
   app.addHook('preHandler', authMiddleware)
@@ -24,6 +25,11 @@ export async function documentRoutes(app: FastifyInstance) {
   app.post('/:id/chat', aiCtrl.chatWithDocument)
   app.get('/:id/knowledge-graph', aiCtrl.getKnowledgeGraph)
   app.post('/:id/knowledge-graph', aiCtrl.generateKnowledgeGraph)
+
+  app.get('/:id/learning-path', lessonCtrl.getLearningPath)
+  app.post('/:id/learning-path', lessonCtrl.postLearningPath)
+  app.patch('/:id/learning-path/progress', lessonCtrl.patchLearningPathProgress)
+  app.patch('/:id/learning-path/nodes/:nodeId/complete', lessonCtrl.patchLearningPathNodeComplete)
 
   app.get('/:id', ctrl.getDocument)
   app.put('/:id', ctrl.updateDocument)
