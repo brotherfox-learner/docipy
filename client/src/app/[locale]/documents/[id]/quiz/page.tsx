@@ -291,15 +291,15 @@ export default function DocumentQuizPage({ params }: { params: Promise<{ id: str
             <fieldset className="flex flex-wrap items-center gap-3 border-0 p-0 m-0">
               <legend className="sr-only">Language for AI-generated quiz</legend>
               <span className="text-sm font-medium text-slate-600 dark:text-slate-400">AI quiz language</span>
-              <div className="flex items-center gap-1 rounded-lg border border-slate-200 p-0.5 dark:border-slate-700">
+              <div className="flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 p-0.5 dark:border-slate-600 dark:bg-slate-800">
                 <button
                   type="button"
                   onClick={() => setGenerateLang("en")}
                   className={cn(
                     "rounded-md px-3 py-1 text-xs font-bold transition",
                     generateLang === "en"
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                      ? "bg-primary text-white shadow-sm dark:text-white"
+                      : "text-slate-800 hover:bg-white/90 dark:text-slate-100 dark:hover:bg-slate-700"
                   )}
                 >
                   English
@@ -310,8 +310,8 @@ export default function DocumentQuizPage({ params }: { params: Promise<{ id: str
                   className={cn(
                     "rounded-md px-3 py-1 text-xs font-bold transition",
                     generateLang === "th"
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                      ? "bg-primary text-white shadow-sm dark:text-white"
+                      : "text-slate-800 hover:bg-white/90 dark:text-slate-100 dark:hover:bg-slate-700"
                   )}
                 >
                   ไทย
@@ -380,8 +380,8 @@ export default function DocumentQuizPage({ params }: { params: Promise<{ id: str
                         className={cn(
                           "rounded-lg border px-3 py-1.5 text-xs font-semibold transition",
                           q.id === activeQuizId
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                            ? "border-primary bg-primary/10 text-slate-900 dark:bg-primary/20 dark:text-white"
+                            : "border-slate-200 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
                         )}
                       >
                         {new Date(q.created_at).toLocaleString()} · {q.questions.length} Q

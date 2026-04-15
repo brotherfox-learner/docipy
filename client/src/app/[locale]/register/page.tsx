@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { api } from "@/lib/api";
 import { extractApiError } from "@/lib/extractApiError";
+import { getOAuthStartUrl } from "@/lib/oauth-start-url";
 
 export default function RegisterPage() {
     const t = useTranslations("auth");
@@ -17,7 +18,7 @@ export default function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false)
 
     function handleOAuth(provider: "google" | "github") {
-        window.location.href = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/api/auth/oauth/${provider}`;
+        window.location.href = getOAuthStartUrl(provider);
     }
 
     async function handleSubmit(e: React.FormEvent) {

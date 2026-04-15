@@ -187,7 +187,7 @@ export default function KnowledgeGraphPage({ params }: { params: Promise<{ id: s
               descriptions, and edge text follow this language.
             </p>
             <div
-              className="inline-flex rounded-lg border border-slate-200 dark:border-slate-600 p-0.5 gap-0.5"
+              className="inline-flex gap-0.5 rounded-lg border border-slate-200 bg-slate-100 p-0.5 dark:border-slate-600 dark:bg-slate-800"
               role="group"
               aria-label="Knowledge graph output language"
             >
@@ -197,8 +197,8 @@ export default function KnowledgeGraphPage({ params }: { params: Promise<{ id: s
                 onClick={() => setGraphLang("en")}
                 className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
                   graphLang === "en"
-                    ? "bg-primary text-white"
-                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    ? "bg-primary text-white dark:text-white"
+                    : "text-slate-800 hover:bg-white/90 dark:text-slate-100 dark:hover:bg-slate-700"
                 }`}
               >
                 English
@@ -209,8 +209,8 @@ export default function KnowledgeGraphPage({ params }: { params: Promise<{ id: s
                 onClick={() => setGraphLang("th")}
                 className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
                   graphLang === "th"
-                    ? "bg-primary text-white"
-                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    ? "bg-primary text-white dark:text-white"
+                    : "text-slate-800 hover:bg-white/90 dark:text-slate-100 dark:hover:bg-slate-700"
                 }`}
               >
                 ไทย

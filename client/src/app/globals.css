@@ -16,6 +16,15 @@
     scroll-behavior: smooth;
   }
 
+  /* Native selects / system UI: match theme so option text is not white-on-white */
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html:not(.dark) {
+    color-scheme: light;
+  }
+
   body {
     @apply bg-background-light font-sans text-slate-900 antialiased transition-colors duration-150 dark:bg-background-dark dark:text-slate-100;
   }
@@ -47,7 +56,7 @@
 
   /* Language switcher: minimal native select, neutral chevron, comfortable right inset */
   .locale-select {
-    @apply min-h-9 w-full min-w-[7.5rem] cursor-pointer rounded-lg border border-slate-200 bg-white py-1.5 pl-3 pr-9 text-sm font-medium text-slate-800 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100;
+    @apply min-h-9 w-full min-w-[7.5rem] cursor-pointer rounded-lg border border-slate-200 bg-white py-1.5 pl-3 pr-9 text-sm font-medium text-slate-900 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100;
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -69,6 +78,18 @@
 
   .locale-select--in-menu {
     @apply min-h-8 text-xs;
+  }
+
+  /*
+   * Sidebar language switcher: solid fill + dark text (light) / light text (dark).
+   * Avoid translucent bg-white/xx on a white sidebar — was washing out label + options.
+   */
+  .locale-select.locale-select--sidebar {
+    @apply min-w-0 max-w-full border-slate-300 bg-slate-100 font-semibold text-slate-950;
+  }
+
+  .dark .locale-select.locale-select--sidebar {
+    @apply border-slate-500 bg-slate-800 text-white;
   }
 }
 

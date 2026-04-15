@@ -8,6 +8,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { extractApiError } from "@/lib/extractApiError";
+import { getOAuthStartUrl } from "@/lib/oauth-start-url";
 
 function safeReturnPath(from: string | null): string {
   if (!from || !from.startsWith("/") || from.startsWith("//")) return "/dashboard";
@@ -47,7 +48,7 @@ export default function LoginForm() {
   }
 
   function handleOAuth(provider: "google" | "github") {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/api/auth/oauth/${provider}`;
+    window.location.href = getOAuthStartUrl(provider);
   }
 
   return (

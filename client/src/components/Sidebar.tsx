@@ -199,15 +199,21 @@ export function Sidebar() {
           </div>
         ) : null}
 
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <LocaleSwitcher className="flex-1 border-slate-200/80 bg-white/60 text-center dark:border-white/10 dark:bg-white/5" />
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <div className="shrink-0">
+              <ThemeToggle />
+            </div>
+            <div className="min-w-0 flex-1">
+              <LocaleSwitcher className="locale-select--sidebar w-full" />
+            </div>
+          </div>
           <Link
             href="/settings"
-            className="flex-1 flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
-            <span className="material-symbols-outlined text-[20px]">settings</span>
-            <span className="text-sm font-medium">{t("settings")}</span>
+            <span className="material-symbols-outlined text-[20px] shrink-0">settings</span>
+            <span className="text-sm font-medium truncate">{t("settings")}</span>
           </Link>
         </div>
       </div>

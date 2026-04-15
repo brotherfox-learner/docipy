@@ -158,15 +158,15 @@ export default function DocumentFlashcardsPage({ params }: { params: Promise<{ i
             <fieldset className="flex flex-wrap items-center gap-3 border-0 p-0 m-0">
               <legend className="sr-only">Language for AI-generated cards</legend>
               <span className="text-sm font-medium text-slate-600 dark:text-slate-400">AI card language</span>
-              <div className="flex items-center gap-1 rounded-lg border border-slate-200 p-0.5 dark:border-slate-700">
+              <div className="flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 p-0.5 dark:border-slate-600 dark:bg-slate-800">
                 <button
                   type="button"
                   onClick={() => setGenerateLang("en")}
                   className={cn(
                     "rounded-md px-3 py-1 text-xs font-bold transition",
                     generateLang === "en"
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                      ? "bg-primary text-white shadow-sm dark:text-white"
+                      : "text-slate-800 hover:bg-white/90 dark:text-slate-100 dark:hover:bg-slate-700"
                   )}
                 >
                   English
@@ -177,8 +177,8 @@ export default function DocumentFlashcardsPage({ params }: { params: Promise<{ i
                   className={cn(
                     "rounded-md px-3 py-1 text-xs font-bold transition",
                     generateLang === "th"
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                      ? "bg-primary text-white shadow-sm dark:text-white"
+                      : "text-slate-800 hover:bg-white/90 dark:text-slate-100 dark:hover:bg-slate-700"
                   )}
                 >
                   ไทย

@@ -44,8 +44,8 @@ export function DocumentToolsTabs({ documentId, className = "" }: DocumentToolsT
                 href={href}
                 className={`inline-flex rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-3 ${
                   active
-                    ? "bg-primary/15 text-primary"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+                    ? "bg-primary/15 text-slate-900 dark:bg-primary/25 dark:text-white"
+                    : "text-slate-700 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                 }`}
               >
                 {labelBySuffix[suffix]}
