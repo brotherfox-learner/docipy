@@ -1,0 +1,28 @@
+# Dependencies & build output (reinstalled / rebuilt inside Docker)
+node_modules
+dist
+
+# Secrets — never copy into an image
+.env
+.env.*
+!.env.example
+
+# Dev / IDE
+.git
+.gitignore
+*.md
+.vscode
+.idea
+
+# Drizzle / DB tooling (migrations run separately against RDS; not needed at API runtime)
+drizzle
+drizzle.config.ts
+
+# Scripts not used by production server
+scripts
+check-ext.ts
+
+# Logs & OS noise
+npm-debug.log*
+.DS_Store
+Thumbs.db

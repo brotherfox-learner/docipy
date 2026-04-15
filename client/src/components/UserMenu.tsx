@@ -2,9 +2,10 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth-context";
+import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 
 type UserMenuProps = {
   variant?: "header" | "navbar";
@@ -37,9 +38,18 @@ function AvatarImageOrPlaceholder({
   onImageFailed: () => void;
 }) {
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     setLoaded(false);
+  }, [src]);
+
+  /** Cached images often finish before onLoad is attached; read .complete so we do not stay on the gray placeholder. */
+  useLayoutEffect(() => {
+    const el = imgRef.current;
+    if (el?.complete && el.naturalWidth > 0) {
+      setLoaded(true);
+    }
   }, [src]);
 
   const box = size === "sm" ? "h-9 w-9" : "h-10 w-10";
@@ -54,10 +64,10 @@ function AvatarImageOrPlaceholder({
         <span className="absolute inset-0 bg-slate-200 dark:bg-slate-600" aria-hidden />
       ) : null}
       <img
+        ref={imgRef}
         src={src}
-        alt={`Avatar of ${displayName}`}
-        referrerPolicy="no-referrer"
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${loaded ? "opacity-100 z-10" : "opacity-0"}`}
+        alt={displayName}
+        className={`absolute inset-0 z-10 h-full w-full object-cover transition-opacity duration-200 ${loaded ? "opacity-100" : "opacity-0"}`}
         onLoad={() => setLoaded(true)}
         onError={onImageFailed}
       />
@@ -68,6 +78,7 @@ function AvatarImageOrPlaceholder({
 export function UserMenu({ variant = "header" }: UserMenuProps) {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const t = useTranslations("userMenu");
   const [open, setOpen] = useState(false);
   const [avatarFailed, setAvatarFailed] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -117,8 +128,9 @@ export function UserMenu({ variant = "header" }: UserMenuProps) {
     return null;
   }
 
-  const displayName = user.name?.trim() || user.email?.split("@")[0] || "Account";
+  const displayName = user.name?.trim() || user.email?.split("@")[0] || t("account");
   const initialLetter = initialFromUser(user);
+  const avatarAlt = t("avatarOf", { name: displayName });
 
   async function handleLogout() {
     setOpen(false);
@@ -139,7 +151,7 @@ export function UserMenu({ variant = "header" }: UserMenuProps) {
         {avatarSrc && !avatarFailed ? (
           <AvatarImageOrPlaceholder
             src={avatarSrc}
-            displayName={displayName}
+            displayName={avatarAlt}
             size="sm"
             onImageFailed={() => setAvatarFailed(true)}
           />
@@ -176,65 +188,93 @@ export function UserMenu({ variant = "header" }: UserMenuProps) {
             }}
           >
             <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3 dark:border-slate-800">
-            {avatarSrc && !avatarFailed ? (
-              <AvatarImageOrPlaceholder
-                src={avatarSrc}
-                displayName={displayName}
-                size="md"
-                onImageFailed={() => setAvatarFailed(true)}
-              />
-            ) : (
-              <span
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-primary/15 text-base font-bold text-primary"
-                aria-hidden
-              >
-                {initialLetter}
-              </span>
-            )}
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{displayName}</p>
-              <p className="truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
-              <p className="mt-1 text-[10px] font-bold uppercase tracking-wide text-primary">{user.plan} plan</p>
+              {avatarSrc && !avatarFailed ? (
+                <AvatarImageOrPlaceholder
+                  src={avatarSrc}
+                  displayName={avatarAlt}
+                  size="md"
+                  onImageFailed={() => setAvatarFailed(true)}
+                />
+              ) : (
+                <span
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-primary/15 text-base font-bold text-primary"
+                  aria-hidden
+                >
+                  {initialLetter}
+                </span>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{displayName}</p>
+                <p className="truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
+                <p className="mt-1 text-[10px] font-bold uppercase tracking-wide text-primary">
+                  {user.plan} {t("planSuffix")}
+                </p>
+              </div>
             </div>
-          </div>
-          <Link
-            role="menuitem"
-            href="/"
-            className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
-            onClick={() => setOpen(false)}
-          >
-            <span className="material-symbols-outlined mr-2 align-middle text-[18px]">home</span>
-            Home
-          </Link>
-          <Link
-            role="menuitem"
-            href="/dashboard"
-            className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
-            onClick={() => setOpen(false)}
-          >
-            <span className="material-symbols-outlined mr-2 align-middle text-[18px]">dashboard</span>
-            Dashboard
-          </Link>
-          <Link
-            role="menuitem"
-            href="/settings"
-            className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
-            onClick={() => setOpen(false)}
-          >
-            <span className="material-symbols-outlined mr-2 align-middle text-[18px]">settings</span>
-            Settings
-          </Link>
-          <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
-          <button
-            type="button"
-            role="menuitem"
-            className="flex w-full items-center px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
-            onClick={handleLogout}
-          >
-            <span className="material-symbols-outlined mr-2 text-[18px]">logout</span>
-            Log out
-          </button>
-        </div>,
+            <Link
+              role="menuitem"
+              href="/"
+              className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+              onClick={() => setOpen(false)}
+            >
+              <span className="material-symbols-outlined mr-2 align-middle text-[18px]">home</span>
+              {t("home")}
+            </Link>
+            <Link
+              role="menuitem"
+              href="/dashboard"
+              className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+              onClick={() => setOpen(false)}
+            >
+              <span className="material-symbols-outlined mr-2 align-middle text-[18px]">dashboard</span>
+              {t("dashboard")}
+            </Link>
+            <Link
+              role="menuitem"
+              href="/settings"
+              className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+              onClick={() => setOpen(false)}
+            >
+              <span className="material-symbols-outlined mr-2 align-middle text-[18px]">settings</span>
+              {t("settings")}
+            </Link>
+            {user.is_admin ? (
+              <>
+                <Link
+                  role="menuitem"
+                  href="/admin"
+                  className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="material-symbols-outlined mr-2 align-middle text-[18px]">
+                    admin_panel_settings
+                  </span>
+                  {t("admin")}
+                </Link>
+                <Link
+                  role="menuitem"
+                  href="/admin/analytics"
+                  className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="material-symbols-outlined mr-2 align-middle text-[18px]">bar_chart</span>
+                  {t("analytics")}
+                </Link>
+              </>
+            ) : null}
+            <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
+            <LocaleSwitcher variant="menu" menuItem />
+            <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
+            <button
+              type="button"
+              role="menuitem"
+              className="flex w-full items-center px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
+              onClick={handleLogout}
+            >
+              <span className="material-symbols-outlined mr-2 text-[18px]">logout</span>
+              {t("logOut")}
+            </button>
+          </div>,
           document.body
         )}
     </div>

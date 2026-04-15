@@ -21,7 +21,8 @@ function nextStreak(prevStreak: number, lastActivityAt: string | null): number {
   return 1
 }
 
-function xpForNodeType(nodeType: string): number {
+function xpForNode(nodeType: string, content: Record<string, unknown> | null): number {
+  if (nodeType === 'quiz' && content?.mode === 'final_exam') return 50
   if (nodeType === 'quiz') return 25
   if (nodeType === 'flashcard') return 20
   return 15
@@ -240,7 +241,15 @@ export async function patchLearningPathProgress(request: FastifyRequest, reply: 
     return reply.status(400).send({ statusCode: 400, message: 'current_node_index required' })
   }
 
-  const capped = Math.min(current_node_index, Math.max(0, path.total_nodes - 1))
+  const existingProg = await pool.query(
+    `SELECT current_node_index FROM learning_progress WHERE user_id = $1 AND learning_path_id = $2`,
+    [user.id, path.id]
+  )
+  const unlockedCap =
+    existingProg.rows.length > 0
+      ? Math.min(Number(existingProg.rows[0]?.current_node_index) || 0, Math.max(0, path.total_nodes - 1))
+      : 0
+  const capped = Math.min(current_node_index, Math.max(unlockedCap, 0), Math.max(0, path.total_nodes - 1))
 
   await pool.query(
     `INSERT INTO learning_progress (user_id, learning_path_id, current_node_index, completed_node_ids, xp_earned, streak_count)
@@ -281,7 +290,12 @@ export async function patchLearningPathNodeComplete(request: FastifyRequest, rep
   if (nodeRes.rows.length === 0) {
     return reply.status(404).send({ statusCode: 404, message: 'Lesson node not found' })
   }
-  const node = nodeRes.rows[0] as { id: string; order_index: number; node_type: string }
+  const node = nodeRes.rows[0] as {
+    id: string
+    order_index: number
+    node_type: string
+    content: Record<string, unknown> | null
+  }
 
   const existingProg = await pool.query(
     `SELECT * FROM learning_progress WHERE user_id = $1 AND learning_path_id = $2`,
@@ -323,7 +337,7 @@ export async function patchLearningPathNodeComplete(request: FastifyRequest, rep
   }
 
   completedIds = [...completedIds, nodeId]
-  xp += xpForNodeType(node.node_type)
+  xp += xpForNode(node.node_type, node.content)
   streak = nextStreak(streak, lastAt)
 
   const newIndex = Math.min(
@@ -352,7 +366,7 @@ export async function patchLearningPathNodeComplete(request: FastifyRequest, rep
   return reply.send({
     data: {
       progress: prog.rows[0],
-      xp_gained: already ? 0 : xpForNodeType(node.node_type),
+      xp_gained: already ? 0 : xpForNode(node.node_type, node.content),
     },
   })
 }

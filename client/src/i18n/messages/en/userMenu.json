@@ -1,0 +1,11 @@
+{
+  "avatarOf": "Avatar of {name}",
+  "account": "Account",
+  "planSuffix": "plan",
+  "home": "Home",
+  "dashboard": "Dashboard",
+  "settings": "Settings",
+  "admin": "Admin",
+  "analytics": "Analytics",
+  "logOut": "Log out"
+}

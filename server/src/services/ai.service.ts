@@ -31,10 +31,22 @@ export interface SummaryResult {
   keyConcepts: string[]
 }
 
-export async function generateSummary(content: string): Promise<SummaryResult> {
+export type SummaryLanguage = 'en' | 'th'
+
+export async function generateSummary(
+  content: string,
+  language: SummaryLanguage = 'en'
+): Promise<SummaryResult> {
+  const languageInstruction =
+    language === 'th'
+      ? `LANGUAGE (critical): Write "summaryText", every string in "bulletPoints", and every string in "keyConcepts" in Thai (ภาษาไทย). Use natural, clear Thai suitable for learners. If the source is in another language, convey the ideas faithfully in Thai. JSON property names stay in English.`
+      : `LANGUAGE (critical): Write "summaryText", "bulletPoints", and "keyConcepts" in clear English.`
+
   const prompt = `
 You are an expert at summarizing documents for learning purposes.
 Analyze the following document and create a comprehensive summary.
+
+${languageInstruction}
 
 Document:
 """

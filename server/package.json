@@ -1,7 +1,10 @@
 {
+  "engines": {
+    "node": ">=20.16.0 <21 || >=22.3.0"
+  },
   "scripts": {
     "dev": "tsx watch server.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/server.js",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
@@ -16,14 +19,19 @@
     "@fastify/multipart": "^9.4.0",
     "@fastify/rate-limit": "^10.3.0",
     "@google/generative-ai": "^0.24.1",
+    "@mozilla/readability": "^0.6.0",
+    "@opendataloader/pdf": "^2.2.1",
     "axios": "^1.13.6",
     "bcrypt": "^6.0.0",
     "drizzle-orm": "^0.45.1",
+    "dotenv": "^17.3.1",
+    "edge-tts-universal": "^1.4.0",
     "fastify": "^5.8.2",
     "fastify-raw-body": "^5.0.0",
+    "jsdom": "^29.0.2",
     "jsonwebtoken": "^9.0.3",
     "mammoth": "^1.12.0",
-    "pdf-parse-legacy": "npm:pdf-parse@1.1.1",
+    "pdf-parse": "^2.4.5",
     "pg": "^8.20.0",
     "resend": "^6.9.4",
     "stripe": "^20.4.1",
@@ -31,12 +39,13 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/jsdom": "^28.0.1",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.18.0",
-    "dotenv": "^17.3.1",
     "drizzle-kit": "^0.31.10",
     "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

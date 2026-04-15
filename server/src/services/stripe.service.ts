@@ -39,6 +39,8 @@ export async function createCheckoutSession(customerId: string, userId: string):
     mode: 'subscription',
     success_url: `${clientUrl}/settings?upgraded=true`,
     cancel_url: `${clientUrl}/pricing?canceled=true`,
+    /** Duplicated so webhooks can still resolve the user if metadata is stripped in some flows. */
+    client_reference_id: userId,
     metadata: { userId },
     subscription_data: {
       metadata: { userId },

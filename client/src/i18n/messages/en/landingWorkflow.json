@@ -1,0 +1,22 @@
+{
+  "eyebrow": "Workflow",
+  "title": "Built to move you from raw input to usable understanding fast.",
+  "subtitle": "The sequence matters more than the spectacle. Each step has one job, one output, and one clean handoff to the next so the page feels deliberate instead of overloaded.",
+  "steps": {
+    "01": {
+      "title": "Drop in any source",
+      "description": "Upload PDFs, DOCX files, lecture notes, or links and let Docipy normalize messy inputs automatically.",
+      "outcome": "Every source is cleaned into one readable, searchable system instead of scattered raw files."
+    },
+    "02": {
+      "title": "Watch AI map the meaning",
+      "description": "The engine extracts concepts, connects related ideas, and builds a searchable layer of knowledge over every page.",
+      "outcome": "Concepts, relationships, and important passages become structured objects you can actually navigate."
+    },
+    "03": {
+      "title": "Study, search, and decide faster",
+      "description": "Move from static documents to summaries, quizzes, flashcards, and document chat without switching tools.",
+      "outcome": "The output feels like a working product surface, not a dead archive you have to reread from scratch."
+    }
+  }
+}

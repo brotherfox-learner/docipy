@@ -10,6 +10,7 @@ import {
   resolveUploadMimeType,
   MIME_PDF,
 } from '@/services/file.service'
+import { extractContentFromUrl } from '@/services/scrape.service'
 import { checkDocumentLimit } from '@/services/usage.service'
 import { indexDocumentChunks } from '@/services/rag.service'
 
@@ -112,6 +113,61 @@ export async function createDocument(request: FastifyRequest, reply: FastifyRepl
   const created = rows[0] as { id: string; content: string }
   indexDocumentChunks(created.id, content).catch((err) =>
     request.log.error({ err }, 'indexDocumentChunks failed after create')
+  )
+
+  return reply.status(201).send({ data: rows[0] })
+}
+
+// ── Create document from URL (Readability main content) ───────
+const fromUrlSchema = z.object({
+  url: z.string().url().max(2048),
+  title: z.string().min(1).max(500).optional(),
+})
+
+export async function createDocumentFromUrl(request: FastifyRequest, reply: FastifyReply) {
+  const user = (request as AuthenticatedRequest).user
+  const parsed = fromUrlSchema.safeParse(request.body)
+  if (!parsed.success) {
+    return reply.status(400).send({ statusCode: 400, message: parsed.error.issues[0]?.message ?? 'Invalid input' })
+  }
+
+  const allowed = await checkDocumentLimit(user.id, user.plan)
+  if (!allowed) {
+    return reply.status(403).send({
+      statusCode: 403,
+      message: 'You have reached the free plan limit of 5 documents. Please upgrade to Pro.',
+    })
+  }
+
+  let extracted: Awaited<ReturnType<typeof extractContentFromUrl>>
+  try {
+    extracted = await extractContentFromUrl(parsed.data.url.trim())
+  } catch (err) {
+    request.log.warn({ err }, 'extractContentFromUrl failed')
+    const message =
+      err instanceof Error ? err.message : 'Could not fetch or extract content from this URL.'
+    return reply.status(400).send({ statusCode: 400, message })
+  }
+
+  const customTitle = parsed.data.title?.trim()
+  const title = (customTitle && customTitle.length > 0 ? customTitle : extracted.title).slice(0, 500)
+  const content = extracted.content
+  const wordCount = content.split(/\s+/).filter(Boolean).length
+  const sourceUrl = extracted.sourceUrl
+
+  const { rows } = await pool.query(
+    `INSERT INTO documents (user_id, title, content, file_url, word_count)
+     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+    [user.id, title, content, sourceUrl, wordCount]
+  )
+
+  await pool.query('UPDATE usage_limits SET documents_count = documents_count + 1 WHERE user_id = $1', [
+    user.id,
+  ])
+
+  const created = rows[0] as { id: string; content: string }
+  indexDocumentChunks(created.id, content).catch((err) =>
+    request.log.error({ err }, 'indexDocumentChunks failed after from-url')
   )
 
   return reply.status(201).send({ data: rows[0] })

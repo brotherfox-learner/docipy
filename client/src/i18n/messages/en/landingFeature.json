@@ -1,0 +1,37 @@
+{
+  "eyebrow": "Product depth",
+  "title": "One system for retrieval, study, and insight.",
+  "subtitle": "Each layer has a clear purpose, so the page reads like a product with structure instead of a stack of disconnected animated boxes.",
+  "lanes": [
+    {
+      "eyebrow": "Summaries",
+      "title": "See the whole document before you read every page.",
+      "description": "High-signal overviews pull out key themes, action items, and terms so you can orient in seconds.",
+      "points": [
+        "Executive recap that exposes the thesis before you dig into details.",
+        "Concept highlights that surface terms, patterns, and decision points fast.",
+        "Readable output that still works cleanly on mobile and smaller screens."
+      ]
+    },
+    {
+      "eyebrow": "Interactive search",
+      "title": "Ask questions and get answers grounded in your files.",
+      "description": "Chat with one document or across a collection, then jump from answer to source material with clear context.",
+      "points": [
+        "Context-aware chat that stays anchored to the documents you actually uploaded.",
+        "Cited responses that let you verify where the answer came from immediately.",
+        "Cross-document reasoning when multiple files need to be understood together."
+      ]
+    },
+    {
+      "eyebrow": "Knowledge graph",
+      "title": "Turn disconnected paragraphs into a connected system.",
+      "description": "Visual relationships reveal clusters, repeated themes, and hidden dependencies that normal reading misses.",
+      "points": [
+        "Topic mapping that makes dense material easier to scan at a glance.",
+        "Relationship discovery that exposes how concepts and claims connect.",
+        "Faster visual orientation before you commit to deep reading or review."
+      ]
+    }
+  ]
+}

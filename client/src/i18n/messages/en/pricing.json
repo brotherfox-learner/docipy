@@ -1,0 +1,37 @@
+{
+  "title": "Simple, transparent pricing",
+  "subtitle": "Choose the plan that fits your knowledge needs. No hidden fees. Start for free and upgrade when you need to power up.",
+  "canceledNotice": "Checkout was canceled. You can try again whenever you are ready.",
+  "freeTitle": "Free",
+  "perMonth": "/month",
+  "freeDesc": "Perfect for exploring the platform and testing our core AI features.",
+  "freeFeatures": [
+    { "text": "Up to 5 documents", "active": true },
+    { "text": "AI Summary (Limited)", "active": true },
+    { "text": "10 AI Queries per day", "active": true },
+    { "text": "3 Quizzes per document", "active": true },
+    { "text": "Knowledge Graph (Basic)", "active": true },
+    { "text": "File Uploads (PDF/DOCX)", "active": false }
+  ],
+  "getStartedFree": "Get Started for Free",
+  "currentPlan": "Current plan",
+  "freeForever": "Free forever (base tier)",
+  "mostPopular": "Most Popular",
+  "proTitle": "Pro",
+  "proDesc": "For students, researchers, and pros who need unlimited potential.",
+  "proFeatures": [
+    { "text": "Unlimited documents", "active": true },
+    { "text": "100 AI Queries per day", "active": true },
+    { "text": "Unlimited Quizzes", "active": true },
+    { "text": "Unlimited Flashcards", "active": true },
+    { "text": "Advanced Knowledge Graph", "active": true },
+    { "text": "File Uploads up to 10MB", "active": true }
+  ],
+  "checkoutError": "Could not start checkout.",
+  "yourCurrentPlan": "Your current plan",
+  "upgradeToPro": "Upgrade to Pro",
+  "redirecting": "Redirecting…",
+  "stripeTitle": "Secure Payments via Stripe",
+  "stripeBody": "You can cancel your subscription at any time. No hidden fees or long-term contracts.",
+  "footer": "© 2026 AI Knowledge Base Inc. All rights reserved."
+}

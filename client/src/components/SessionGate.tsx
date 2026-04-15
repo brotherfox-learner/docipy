@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { SessionLoadingScreen } from "@/components/SessionLoadingScreen";
 import { shouldSkipSessionBootstrapGate } from "@/lib/routes";

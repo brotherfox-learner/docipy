@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { ChatMarkdown } from "@/components/ChatMarkdown";
@@ -28,27 +28,16 @@ const THREAD_MAX = "max-w-[1280px]";
 function ThinkingIndicator() {
   return (
     <div
-      className="flex items-center gap-2 text-slate-500 dark:text-slate-400"
+      className="flex flex-wrap items-center gap-2.5 text-slate-600 dark:text-slate-300"
       role="status"
       aria-live="polite"
       aria-label="Assistant is thinking"
     >
-      <span className="text-sm font-medium">Thinking</span>
-      <span className="flex items-center gap-1 h-4" aria-hidden>
-        {[0, 1, 2].map((i) => (
-          <motion.span
-            key={i}
-            className="size-1.5 rounded-full bg-current"
-            animate={{ y: [0, -5, 0], opacity: [0.35, 1, 0.35] }}
-            transition={{
-              duration: 0.7,
-              repeat: Infinity,
-              repeatType: "loop",
-              ease: "easeInOut",
-              delay: i * 0.12,
-            }}
-          />
-        ))}
+      <span className="text-sm font-semibold">Thinking...</span>
+      <span className="flex items-center gap-1.5" aria-hidden>
+        <span className="size-2 rounded-full bg-cyan-400 animate-pulse" />
+        <span className="size-2 rounded-full bg-sky-500 animate-pulse [animation-delay:150ms]" />
+        <span className="size-2 rounded-full bg-primary animate-pulse [animation-delay:300ms]" />
       </span>
     </div>
   );
@@ -207,7 +196,14 @@ export function ChatPanel({
         {/* ส่วนบนสุดของการแสดงผลของการค้นหา */}
         <div className={`mx-auto w-full ${THREAD_MAX} px-4 sm:px-5`}>
           {loadingHistory ? (
-            <p className="text-slate-500 dark:text-slate-400 text-sm py-4">Loading conversation…</p>
+            <section className="py-4" aria-label="Loading conversation" aria-busy="true">
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Loading conversation...</p>
+              <div className="mt-2 flex items-center gap-1.5" aria-hidden>
+                <span className="size-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="size-2 rounded-full bg-sky-500 animate-pulse [animation-delay:150ms]" />
+                <span className="size-2 rounded-full bg-primary animate-pulse [animation-delay:300ms]" />
+              </div>
+            </section>
           ) : null}
 
           {!loadingHistory && turns.length === 0 ? (

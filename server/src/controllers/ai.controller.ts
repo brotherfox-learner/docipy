@@ -42,13 +42,18 @@ export async function generateSummary(request: FastifyRequest, reply: FastifyRep
   const doc = await getDocumentOrFail(id, user.id, reply)
   if (!doc) return
 
+  const { language, regenerate } = parseSummaryRequestBody(request.body)
+
   const existing = await pool.query('SELECT * FROM summaries WHERE document_id = $1', [id])
-  if (existing.rows.length > 0) {
+  if (existing.rows.length > 0 && !regenerate) {
     return reply.send({ data: existing.rows[0] })
+  }
+  if (existing.rows.length > 0 && regenerate) {
+    await pool.query('DELETE FROM summaries WHERE document_id = $1', [id])
   }
 
   try {
-    const result = await aiSummary(doc.content || '')
+    const result = await aiSummary(doc.content || '', language)
 
     const { rows } = await pool.query(
       `INSERT INTO summaries (document_id, summary_text, bullet_points, key_concepts)
@@ -256,6 +261,18 @@ function parseFlashcardRequestLang(body: unknown): 'en' | 'th' {
   const b = body as { lang?: string } | undefined
   const raw = typeof b?.lang === 'string' ? b.lang.trim().toLowerCase() : ''
   return raw === 'th' ? 'th' : 'en'
+}
+
+function parseSummaryRequestBody(body: unknown): { language: 'en' | 'th'; regenerate: boolean } {
+  const b = body as { language?: string; lang?: string; regenerate?: boolean } | undefined
+  const raw =
+    typeof b?.language === 'string'
+      ? b.language.trim().toLowerCase()
+      : typeof b?.lang === 'string'
+        ? b.lang.trim().toLowerCase()
+        : ''
+  const language = raw === 'th' ? 'th' : 'en'
+  return { language, regenerate: Boolean(b?.regenerate) }
 }
 
 function parseKnowledgeGraphLang(query: unknown): 'en' | 'th' {

@@ -60,8 +60,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data } = await api.post('/api/auth/refresh')
       setAccessToken(data.data.accessToken)
       setUser(data.data.user)
-    } catch {
+    } catch (err: unknown) {
       setUser(null)
+      clearAccessToken()
+      const status = (err as { response?: { status?: number } }).response?.status
+      if (status === 401 || status === 403) {
+        try {
+          await api.post('/api/auth/logout')
+        } catch {
+          /* ignore — still clear client state */
+        }
+      }
     } finally {
       if (isFirstBootstrap.current) {
         isFirstBootstrap.current = false

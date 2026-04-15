@@ -70,7 +70,7 @@ api.interceptors.response.use(
         clearAccessToken()
         refreshQueue = []
         if (typeof window !== 'undefined') {
-          window.location.href = '/login'
+          window.location.href = '/login?reauth=1'
         }
         return Promise.reject(refreshError)
       } finally {

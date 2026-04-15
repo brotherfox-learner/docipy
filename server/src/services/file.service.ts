@@ -1,8 +1,13 @@
+import { execFileSync } from 'child_process'
+import { randomUUID } from 'crypto'
 import { existsSync } from 'fs'
+import { writeFile, unlink } from 'fs/promises'
+import { tmpdir } from 'os'
 import { join } from 'path'
 import { Worker } from 'worker_threads'
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { convert } from '@opendataloader/pdf'
 import mammoth from 'mammoth'
 import { normalizeExtractedDocumentText } from '../utils/documentTextNormalize'
 
@@ -20,17 +25,72 @@ function pdfTextTimeoutMs(): number {
   return 60_000
 }
 
+/**
+ * `auto` (default): use OpenDataLoader when `java` is on PATH, else pdf.js worker.
+ * `opendataloader`: OpenDataLoader only (requires Java 11+).
+ * `pdfjs`: pdf-parse worker only.
+ */
+function pdfExtractEngine(): 'opendataloader' | 'pdfjs' | 'auto' {
+  const v = (process.env.PDF_EXTRACT_ENGINE || 'auto').trim().toLowerCase()
+  if (v === 'opendataloader' || v === 'pdfjs' || v === 'auto') return v
+  return 'auto'
+}
+
+let javaOnPathCache: boolean | null = null
+
+function isJavaOnPath(): boolean {
+  if (javaOnPathCache !== null) return javaOnPathCache
+  try {
+    execFileSync('java', ['-version'], { stdio: 'ignore', timeout: 5000 })
+    javaOnPathCache = true
+  } catch {
+    javaOnPathCache = false
+  }
+  return javaOnPathCache
+}
+
+/**
+ * OpenDataLoader runs a bundled JAR via `java`; input must be a real file path.
+ * If `Promise.race` times out, the JVM process is not killed (package does not expose the child).
+ */
+async function extractPdfTextWithOpenDataLoader(buffer: Buffer, timeoutMs: number): Promise<string> {
+  const file = join(tmpdir(), `docipy-pdf-${randomUUID()}.pdf`)
+  await writeFile(file, buffer)
+  try {
+    const conversion = convert(file, {
+      format: 'text',
+      toStdout: true,
+      quiet: true,
+    })
+    const timeout = new Promise<never>((_, reject) => {
+      setTimeout(() => {
+        reject(
+          new Error(
+            `OpenDataLoader PDF extraction timed out after ${timeoutMs}ms. The file may be damaged, unusually complex, or image-only.`
+          )
+        )
+      }, timeoutMs)
+    })
+    const text = await Promise.race([conversion, timeout])
+    return (text ?? '').trim()
+  } finally {
+    await unlink(file).catch(() => undefined)
+  }
+}
+
 type PdfWorkerMessage = { ok: true; text: string } | { ok: false; error: string }
 
 /**
- * Runs pdf-parse (legacy) in a worker thread so we can terminate on timeout.
- * Some PDFs hang pdf.js in-process; Promise.race on the main thread does not stop that work.
+ * Runs pdf-parse (pdf.js) in a worker thread so we can terminate on timeout.
+ * Some PDFs hang the parser in-process; Promise.race on the main thread does not stop that work.
  */
 async function extractPdfTextWithWorker(buffer: Buffer, timeoutMs: number): Promise<string> {
   const scriptPath = pdfWorkerScriptPath()
   return new Promise((resolve, reject) => {
     let settled = false
-    const worker = new Worker(scriptPath, { workerData: buffer })
+    // Fresh copy so workerData serialization never aliases a consumed multipart buffer.
+    const workerData = Buffer.from(buffer)
+    const worker = new Worker(scriptPath, { workerData })
 
     const timer = setTimeout(() => {
       if (settled) return
@@ -234,7 +294,22 @@ export async function extractTextFromFile(
   let raw: string
   if (mimeType === MIME_PDF) {
     const ms = pdfTextTimeoutMs()
-    raw = await extractPdfTextWithWorker(buffer, ms)
+    const engine = pdfExtractEngine()
+    const tryOpenDataLoader =
+      engine === 'opendataloader' || (engine === 'auto' && isJavaOnPath())
+
+    if (tryOpenDataLoader) {
+      try {
+        raw = await extractPdfTextWithOpenDataLoader(buffer, ms)
+      } catch (err) {
+        if (engine === 'opendataloader') {
+          throw err instanceof Error ? err : new Error(String(err))
+        }
+        raw = await extractPdfTextWithWorker(buffer, ms)
+      }
+    } else {
+      raw = await extractPdfTextWithWorker(buffer, ms)
+    }
   } else if (mimeType === MIME_DOCX || mimeType.includes('wordprocessingml')) {
     const result = await mammoth.extractRawText({ buffer })
     raw = result.value

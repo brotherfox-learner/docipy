@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { formatFileSize } from "@/lib/formatFileSize";
 
 const ACCEPT =
@@ -19,10 +20,14 @@ export function AttachFileSection({
   file,
   onFileChange,
   disabled,
-  heading = "Attach File",
-  description = "PDF or DOCX — max 10 MB per file.",
-  browseLabel = "Browse files",
+  heading,
+  description,
+  browseLabel,
 }: AttachFileSectionProps) {
+  const t = useTranslations("attachFile");
+  const resolvedHeading = heading ?? t("heading");
+  const resolvedDescription = description ?? t("description");
+  const resolvedBrowse = browseLabel ?? t("browseLabel");
   const reactId = useId();
   const inputId = `attach-file-${reactId}`;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -36,9 +41,9 @@ export function AttachFileSection({
         id={`${inputId}-heading`}
         className="text-base font-bold text-blue-950 dark:text-blue-100 tracking-tight mb-1"
       >
-        {heading}
+        {resolvedHeading}
       </h2>
-      <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{description}</p>
+      <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">{resolvedDescription}</p>
 
       <input
         ref={inputRef}
@@ -63,7 +68,7 @@ export function AttachFileSection({
           <span className="material-symbols-outlined text-[28px] text-blue-600 dark:text-blue-400 mb-1 block" aria-hidden>
             upload_file
           </span>
-          {browseLabel}
+          {resolvedBrowse}
         </button>
       ) : (
         <ul className="flex flex-col gap-3 list-none p-0 m-0">
@@ -89,7 +94,7 @@ export function AttachFileSection({
                   if (inputRef.current) inputRef.current.value = "";
                 }}
                 className="shrink-0 p-2 rounded-lg text-slate-500 hover:text-red-600 hover:bg-white/80 dark:hover:bg-slate-900/60 disabled:opacity-40 transition-colors"
-                aria-label="Remove file"
+                aria-label={t("removeAria")}
               >
                 <span className="material-symbols-outlined text-[22px]" aria-hidden>
                   close
@@ -104,7 +109,7 @@ export function AttachFileSection({
               onClick={() => inputRef.current?.click()}
               className="text-sm font-semibold text-blue-700 dark:text-blue-300 hover:underline"
             >
-              Replace file
+              {t("replaceFile")}
             </button>
           </li>
         </ul>

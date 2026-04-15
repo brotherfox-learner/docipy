@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { AiGeneratingPanel } from "@/components/AiGeneratingPanel";
 
 type DocumentFeatureEmptyStateProps = {
   /** Material Symbols icon name */
@@ -6,9 +7,13 @@ type DocumentFeatureEmptyStateProps = {
   title: string;
   description: string;
   primaryAction?: ReactNode;
-  /** When true, shows loading text instead of primaryAction */
+  /** When true, shows the shared AI generating panel instead of primaryAction */
   loading?: boolean;
+  /** @deprecated Prefer generatingTitle + generatingDescription. Used as description fallback. */
   loadingLabel?: string;
+  generatingTitle?: string;
+  generatingDescription?: string;
+  generatingFooter?: ReactNode;
 };
 
 /**
@@ -21,8 +26,27 @@ export function DocumentFeatureEmptyState({
   description,
   primaryAction,
   loading = false,
-  loadingLabel = "Generating…",
+  loadingLabel,
+  generatingTitle,
+  generatingDescription,
+  generatingFooter,
 }: DocumentFeatureEmptyStateProps) {
+  const panelTitle = generatingTitle ?? "Building...";
+  const panelDescription =
+    generatingDescription ??
+    loadingLabel ??
+    "This can take up to a minute. Stay on this page while we get things ready.";
+
+  if (loading) {
+    return (
+      <AiGeneratingPanel
+        title={panelTitle}
+        description={panelDescription}
+        footer={generatingFooter}
+      />
+    );
+  }
+
   return (
     <section
       className="rounded-2xl border border-slate-200 bg-white p-10 text-center dark:border-slate-800 dark:bg-slate-900"
@@ -37,13 +61,7 @@ export function DocumentFeatureEmptyState({
         {title}
       </h2>
       <p className="mx-auto mt-2 max-w-md text-sm text-slate-500 dark:text-slate-400">{description}</p>
-      {loading ? (
-        <p className="mt-6 text-sm text-slate-500 dark:text-slate-400" role="status">
-          {loadingLabel}
-        </p>
-      ) : primaryAction ? (
-        <div className="mt-6 flex flex-wrap justify-center gap-3">{primaryAction}</div>
-      ) : null}
+      {primaryAction ? <div className="mt-6 flex flex-wrap justify-center gap-3">{primaryAction}</div> : null}
     </section>
   );
 }

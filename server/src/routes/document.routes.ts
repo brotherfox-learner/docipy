@@ -11,6 +11,7 @@ export async function documentRoutes(app: FastifyInstance) {
 
   app.get('/', ctrl.listDocuments)
   app.post('/', ctrl.createDocument)
+  app.post('/from-url', ctrl.createDocumentFromUrl)
   app.post('/upload', { preHandler: [planGuard('pro')] }, ctrl.uploadDocument)
   app.post('/:id/append-upload', { preHandler: [planGuard('pro')] }, ctrl.appendUploadToDocument)
 

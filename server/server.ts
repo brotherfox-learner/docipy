@@ -7,6 +7,7 @@ import { flashcardRoutes } from './src/routes/flashcard.routes'
 import { paymentRoutes } from './src/routes/payment.routes'
 import { adminRoutes } from './src/routes/admin.routes'
 import { learningRoutes } from './src/routes/learning.routes'
+import { ttsRoutes } from './src/routes/tts.routes'
 
 const app = Fastify({
   logger: {
@@ -26,6 +27,7 @@ async function start() {
     await app.register(paymentRoutes, { prefix: '/api/payment' })
     await app.register(adminRoutes, { prefix: '/api/admin' })
     await app.register(learningRoutes, { prefix: '/api/learning' })
+    await app.register(ttsRoutes, { prefix: '/api/tts' })
 
     // Health Check
     app.get('/health', async () => ({ status: 'ok', timestamp: new Date().toISOString() }))

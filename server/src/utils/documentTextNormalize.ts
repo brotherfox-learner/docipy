@@ -1,5 +1,5 @@
 /**
- * Post-process text from PDF/DOCX extractors. pdf-parse often emits hard line breaks
+ * Post-process text from PDF/DOCX extractors. PDF extractors often emit hard line breaks
  * inside paragraphs, hyphenation at column edges, and orphan footnote indices (e.g. "6" then " NIMS...").
  */
 

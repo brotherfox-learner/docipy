@@ -10,10 +10,20 @@ export function extractApiError(err: unknown): string | undefined {
   }
 
   const ax = err as { response?: { status?: number; data?: unknown } };
-  const data = ax.response?.data as { message?: string; error?: string } | string | undefined;
-  if (data && typeof data === "object") {
-    if (typeof data.message === "string" && data.message.length > 0) return data.message;
-    if (typeof data.error === "string" && data.error.length > 0) return data.error;
+  let data = ax.response?.data as { message?: string; error?: string } | string | ArrayBuffer | undefined;
+  if (typeof ArrayBuffer !== "undefined" && data instanceof ArrayBuffer) {
+    try {
+      const txt = new TextDecoder().decode(data);
+      const j = JSON.parse(txt) as { message?: string; error?: string };
+      data = j;
+    } catch {
+      data = undefined;
+    }
+  }
+  if (data && typeof data === "object" && !(data instanceof ArrayBuffer)) {
+    const o = data as { message?: string; error?: string };
+    if (typeof o.message === "string" && o.message.length > 0) return o.message;
+    if (typeof o.error === "string" && o.error.length > 0) return o.error;
   }
   if (typeof data === "string" && data.trim().length > 0) return data.trim();
 

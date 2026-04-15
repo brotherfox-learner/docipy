@@ -1,0 +1,23 @@
+{
+  "planLabel": "แพ็กเกจ {plan}",
+  "accountFallback": "บัญชี",
+  "dashboard": "แดชบอร์ด",
+  "documents": "เอกสาร",
+  "chat": "แชท",
+  "flashcards": "แฟลชการ์ด",
+  "quizzes": "แบบทดสอบ",
+  "adminDashboard": "แดชบอร์ดผู้ดูแล",
+  "adminAnalytics": "วิเคราะห์ผู้ดูแล",
+  "learn": "เรียนรู้",
+  "summary": "สรุป",
+  "graph": "กราฟ",
+  "quiz": "แบบทดสอบ",
+  "thisDocument": "เอกสารนี้",
+  "documentToolsAria": "เครื่องมือสำหรับเอกสารที่เปิดอยู่",
+  "planUsage": "การใช้แพ็กเกจ",
+  "documentsCount": "เอกสาร {current} / {cap}",
+  "aiToday": "AI วันนี้ {current} / {cap}",
+  "proUsageLine": "แพ็กเกจ Pro — เอกสาร {docCount} ไฟล์, คำถาม AI วันนี้ {aiCount} ครั้ง",
+  "upgradeLine": "อัปเกรดเป็น Pro เพื่อขีดจำกัดที่สูงขึ้นและอัปโหลด PDF/DOCX",
+  "settings": "การตั้งค่า"
+}

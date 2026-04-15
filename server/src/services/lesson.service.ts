@@ -74,8 +74,11 @@ ${documentExcerpt.slice(0, 22000)}
 
 Rules:
 - Produce between 8 and 12 steps in "outline".
-- Mix node types: use several "text", at least one "chart" (quantitative or categorical breakdown), at least one "image" (teach one idea clearly: description + key takeaways + self-check — no image URLs), at least two "quiz", at least one "flashcard", and end with exactly one "summary" as the last item.
-- After every 2–3 teaching nodes (text/chart/image), insert a "quiz" or "flashcard" checkpoint.
+- Mix node types: use several "text", at least one "chart" (quantitative or categorical breakdown), at least one "image" (teach one idea clearly: description + key takeaways + self-check — no image URLs), at least two "quiz", and at least one "summary".
+- Do NOT use "flashcard" in the outline.
+- After every 2–3 teaching nodes (text/chart/image), insert a checkpoint "quiz".
+- Every checkpoint quiz must only ask about concepts that were already taught in earlier nodes.
+- The final node MUST be a "quiz" and it must be the cumulative final exam.
 - Titles must be short (max ~80 chars).
 
 Respond ONLY with valid JSON (no markdown, no backticks):
@@ -87,7 +90,7 @@ Respond ONLY with valid JSON (no markdown, no backticks):
   ]
 }
 
-Allowed "nodeType" values only: "text", "chart", "image", "quiz", "flashcard", "summary".
+Allowed "nodeType" values only: "text", "chart", "image", "quiz", "summary".
 `
 
   const result = await generateContentWithChain(prompt)
@@ -111,18 +114,31 @@ Allowed "nodeType" values only: "text", "chart", "image", "quiz", "flashcard", "
     throw new Error('Learning path outline too short')
   }
 
-  const last = outline[outline.length - 1]
-  if (last && last.nodeType !== 'summary') {
-    outline.push({
-      title: language === 'th' ? 'สรุปและข้อคิดสำคัญ' : 'Summary and key takeaways',
+  for (const item of outline) {
+    if (item.nodeType === 'flashcard') item.nodeType = 'text'
+  }
+
+  if (!outline.some((item) => item.nodeType === 'summary')) {
+    outline.splice(Math.max(1, outline.length - 1), 0, {
+      title: language === 'th' ? 'สรุปภาพรวมก่อนสอบ' : 'Course recap before the exam',
       nodeType: 'summary',
+    })
+  }
+
+  const last = outline[outline.length - 1]
+  if (last && last.nodeType !== 'quiz') {
+    outline.push({
+      title: language === 'th' ? 'แบบทดสอบปลายทาง' : 'Final exam',
+      nodeType: 'quiz',
     })
   }
 
   return {
     pathTitle: String(parsed.pathTitle || 'Learning path').slice(0, 500),
     pathDescription: String(parsed.pathDescription || '').slice(0, 2000),
-    outline: outline.slice(0, 15),
+    outline: outline.slice(0, 15).map((item, index, arr) =>
+      index === arr.length - 1 ? { ...item, nodeType: 'quiz' } : item
+    ),
   }
 }
 
@@ -162,7 +178,7 @@ Respond ONLY with valid JSON (no markdown, no backticks):
   "nodes": [
     {
       "title": "string (can refine outline title slightly)",
-      "node_type": "text|chart|image|quiz|flashcard|summary",
+      "node_type": "text|chart|image|quiz|summary",
       "content": { }
     }
   ]
@@ -172,14 +188,16 @@ Content shapes by node_type:
 - text: { "body": "Markdown lesson (2-6 short paragraphs)", "key_points": ["3-5 bullet strings"] }
 - chart: { "chart_type": "bar"|"pie"|"line"|"area", "title": "short", "description": "1-2 sentences", "series": [ { "label": "string", "value": number } ] } with 3-8 series points, values plausible from the document; prefer "bar" for category comparison, "line" or "area" for ordered progression, "pie" for parts-of-whole
 - image: { "caption": "string", "alt": "string", "description": "2-3 sentences explaining the concept clearly", "key_ideas": [ "2-4 very short bullets the learner should memorize" ], "self_check": "One concrete question the learner answers in their head before continuing (not generic)" } — no image URLs; teach, do not decorate
-- quiz: { "questions": [ { "question": "string", "options": ["four strings"], "correct_index": 0-3, "explanation": "string" } ] } with 2-3 questions per quiz node
-- flashcard: { "cards": [ { "front": "string", "back": "string" } ] } with 4-6 cards
+- checkpoint quiz nodes before the final node: { "mode": "checkpoint", "questions": [ { "question": "string", "options": ["four strings"], "correct_index": 0-3, "explanation": "string" } ] } with exactly 3 questions. Every checkpoint question must be answerable from concepts already taught before that quiz in this outline.
+- the final node: { "mode": "final_exam", "passing_score": 70, "questions": [ { "question": "string", "options": ["four strings"], "correct_index": 0-3, "explanation": "string" } ] } with 10 cumulative questions covering the whole learning path.
 - summary: { "body": "Markdown recap", "takeaways": ["4-6 strings"] }
 
 Rules:
 - "nodes" length MUST equal ${outline.length}.
 - For each index i, nodes[i].node_type MUST match outline[i].nodeType from the outline above.
 - Multiple choice: exactly 4 options; correct_index 0-3.
+- Never output a flashcard node.
+- The final node must be the final exam quiz, and it must test cumulative understanding from earlier lessons.
 `
 
   const result = await generateContentWithChain(prompt)
@@ -197,7 +215,15 @@ Rules:
       n?.content && typeof n.content === 'object' && !Array.isArray(n.content)
         ? (n.content as Record<string, unknown>)
         : {}
-    out.push({ title, nodeType: nodeType === expectedType ? nodeType : expectedType, content })
+    const safeType = nodeType === 'flashcard' ? 'text' : nodeType
+    const finalType = safeType === expectedType ? safeType : expectedType
+    if (finalType === 'quiz') {
+      content.mode = i === outline.length - 1 ? 'final_exam' : 'checkpoint'
+      if (i === outline.length - 1 && typeof content.passing_score !== 'number') {
+        content.passing_score = 70
+      }
+    }
+    out.push({ title, nodeType: finalType, content })
   }
 
   return out

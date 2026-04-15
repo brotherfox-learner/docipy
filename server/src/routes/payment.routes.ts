@@ -13,4 +13,15 @@ export async function paymentRoutes(app: FastifyInstance) {
 
   app.post('/checkout', { preHandler: [authMiddleware] }, ctrl.createCheckout)
   app.get('/subscription', { preHandler: [authMiddleware] }, ctrl.getSubscription)
+  app.post(
+    '/subscription/sync',
+    { preHandler: [authMiddleware] },
+    ctrl.syncSubscriptionAfterCheckout
+  )
+  app.post(
+    '/subscription/cancel',
+    { preHandler: [authMiddleware] },
+    ctrl.cancelSubscriptionAtPeriodEnd
+  )
+  app.post('/subscription/resume', { preHandler: [authMiddleware] }, ctrl.resumeSubscription)
 }

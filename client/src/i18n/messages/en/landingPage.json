@@ -1,0 +1,38 @@
+{
+  "heroBadge": "AI document intelligence",
+  "heroBrand": "Docipy",
+  "heroHeadline": "Build a living knowledge layer over every document you own.",
+  "heroSubhead": "Stop reading static files in isolation. Docipy turns PDFs, notes, and links into searchable structure, guided study tools, and answers you can actually use.",
+  "startFree": "Start free",
+  "openDashboard": "Open dashboard",
+  "heroSignals": [
+    "Upload PDFs, notes, or links into one workspace.",
+    "Ask grounded questions and trace answers back to source material.",
+    "Study with routes, quizzes, and context-aware recall tools."
+  ],
+  "sceneTag1": "Retrieval intelligence field",
+  "sceneTag2": "Live semantic indexing",
+  "sceneWorkspaceEyebrow": "Live workspace",
+  "sceneWorkspaceTitle": "One upload becomes a searchable learning surface.",
+  "sceneWorkspaceBody": "The scene adds atmosphere, but the message stays practical: structure the document once, then retrieve, study, and move through it with context.",
+  "heroMetrics": [
+    { "label": "Grounded answers", "value": "Source-linked retrieval" },
+    { "label": "Guided study", "value": "Routes, quizzes, and recall" },
+    { "label": "Semantic structure", "value": "Layers extracted from raw files" }
+  ],
+  "statsEyebrow": "Fast value",
+  "statsTitle": "The fastest path from raw file to usable knowledge.",
+  "statsBody": "This section now works as proof, not decoration. The numbers stay readable, the spacing stays open, and nothing exists just to fill a box.",
+  "statsItems": [
+    { "value": "< 60s", "label": "from upload to useful output" },
+    { "value": "4 modes", "label": "summary, quiz, learn, and chat" },
+    { "value": "1 workspace", "label": "for reading, studying, and retrieval" }
+  ],
+  "ctaEyebrow": "Start now",
+  "ctaTitle": "Make your documents feel like a product, not a pile.",
+  "ctaBody": "Upload once, then search, learn, and revisit with structure. Docipy helps students, researchers, and teams move faster from information to clarity.",
+  "ctaAside": "Start a workspace, upload a real document, and the system begins turning it into something you can search, study, and return to without friction.",
+  "createWorkspace": "Create your workspace",
+  "viewPricing": "View pricing",
+  "footer": "© 2026 Docipy. Structured knowledge for every document."
+}

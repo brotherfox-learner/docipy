@@ -1,0 +1,23 @@
+{
+  "planLabel": "{plan} plan",
+  "accountFallback": "Account",
+  "dashboard": "Dashboard",
+  "documents": "Documents",
+  "chat": "Chat",
+  "flashcards": "Flashcards",
+  "quizzes": "Quizzes",
+  "adminDashboard": "Admin dashboard",
+  "adminAnalytics": "Admin analytics",
+  "learn": "Learn",
+  "summary": "Summary",
+  "graph": "Graph",
+  "quiz": "Quiz",
+  "thisDocument": "This document",
+  "documentToolsAria": "Tools for the open document",
+  "planUsage": "Plan usage",
+  "documentsCount": "Documents {current} / {cap}",
+  "aiToday": "AI today {current} / {cap}",
+  "proUsageLine": "Pro plan — {docCount} documents, {aiCount} AI queries today.",
+  "upgradeLine": "Upgrade to Pro for higher limits and PDF/DOCX upload.",
+  "settings": "Settings"
+}
