@@ -102,4 +102,19 @@
     background-size: 72px 72px;
     mask-image: radial-gradient(circle at center, black 30%, transparent 78%);
   }
+
+  /* Slight scale so object-cover clips edges cleanly on ultrawide viewports */
+  .landing-hero-video {
+    transform: scale(1.04);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing-hero-video {
+      transform: none;
+    }
+  }
+
+  .font-hero-display {
+    font-family: var(--font-outfit), var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  }
 }

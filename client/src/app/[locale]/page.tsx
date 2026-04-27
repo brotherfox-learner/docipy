@@ -7,6 +7,7 @@ import { useMessages, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Navbar } from "@/components/Navbar";
 import { LandingCtaDocumentStillLife } from "@/components/landing/LandingCtaDocumentStillLife";
+import { LandingHeroVideoBackdrop } from "@/components/landing/LandingHeroVideoBackdrop";
 import { LandingWorkflowSection } from "@/components/landing/LandingWorkflowSection";
 import type { LandingFeatureLane } from "@/components/landing/LandingFeatureGrid";
 import { LandingFeatureGrid } from "@/components/landing/LandingFeatureGrid";
@@ -65,16 +66,18 @@ export default function Home() {
       <main className="overflow-hidden bg-[radial-gradient(circle_at_top,#eef4ff_0%,#f8fbff_42%,#f4f7fb_100%)] pt-16 text-slate-900 dark:bg-[radial-gradient(circle_at_top,#13203f_0%,#09101f_45%,#060b16_100%)] dark:text-white">
         <section
           ref={heroRef}
-          className="relative isolate min-h-[calc(100svh-4rem)] overflow-hidden border-b border-slate-200/70 dark:border-white/10"
+          className="relative isolate min-h-[calc(100svh-4rem)] overflow-hidden border-b border-slate-200/60 dark:border-white/10"
         >
-          <div className="absolute inset-0">
-            <div className="absolute left-1/2 top-[-12rem] h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(77,118,255,0.32),rgba(77,118,255,0))]" />
-            <div className="absolute right-[-8rem] top-32 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(64,224,208,0.26),rgba(64,224,208,0))]" />
-            <div className="absolute bottom-[-10rem] left-[-8rem] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(22,163,255,0.18),rgba(22,163,255,0))]" />
-            <div className="hero-grid absolute inset-0 opacity-50 dark:opacity-60" />
+          <LandingHeroVideoBackdrop />
+
+          <div className="absolute inset-0" aria-hidden>
+            <div className="absolute inset-0 bg-gradient-to-r from-white/96 via-white/78 to-transparent dark:from-slate-950/94 dark:via-slate-950/55 dark:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/[0.06] via-transparent to-white/92 dark:from-slate-950/40 dark:via-transparent dark:to-slate-950/90" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_78%_58%_at_88%_36%,rgba(49,94,251,0.12),transparent_60%)] dark:bg-[radial-gradient(ellipse_78%_58%_at_88%_36%,rgba(34,211,238,0.11),transparent_54%)]" />
+            <div className="hero-grid absolute inset-0 opacity-[0.26] dark:opacity-[0.18]" />
           </div>
 
-          <div className="relative mx-auto grid min-h-[calc(100svh-4rem)] max-w-7xl items-center gap-12 px-5 py-8 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(480px,1.12fr)] lg:items-start lg:px-8 lg:py-14 xl:gap-14 xl:px-10">
+          <div className="relative z-10 mx-auto grid min-h-[calc(100svh-4rem)] max-w-7xl items-center gap-12 px-5 py-8 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(480px,1.12fr)] lg:items-start lg:px-8 lg:py-14 xl:gap-14 xl:px-10">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -84,22 +87,22 @@ export default function Home() {
             >
               <motion.div
                 variants={sectionReveal}
-                className="mb-6 inline-flex items-center gap-3 rounded-full border border-white/70 bg-white/75 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.34em] text-slate-700 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:shadow-[0_20px_50px_rgba(2,6,23,0.45)]"
+                className="mb-6 inline-flex items-center gap-3 rounded-full border border-slate-200/90 bg-white/90 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-slate-700 shadow-[0_12px_36px_rgba(15,23,42,0.06)] backdrop-blur-md dark:border-white/12 dark:bg-slate-950/45 dark:text-slate-100 dark:shadow-[0_16px_44px_rgba(2,6,23,0.4)]"
               >
-                <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_18px_rgba(34,211,238,0.9)]" />
+                <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_14px_rgba(34,211,238,0.75)]" />
                 {t("heroBadge")}
               </motion.div>
 
               <motion.p
                 variants={sectionReveal}
-                className="mb-4 text-sm font-medium uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400"
+                className="mb-4 text-sm font-semibold uppercase tracking-[0.26em] text-slate-600 dark:text-slate-400"
               >
                 {t("heroBrand")}
               </motion.p>
 
               <motion.h1
                 variants={sectionReveal}
-                className="max-w-4xl text-5xl font-black leading-[0.94] tracking-[-0.05em] sm:text-6xl lg:text-[4.55rem]"
+                className="font-hero-display max-w-4xl text-5xl font-black leading-[0.92] tracking-[-0.045em] sm:text-6xl lg:text-[4.45rem]"
               >
                 {t("heroHeadline")}
               </motion.h1>
@@ -111,33 +114,36 @@ export default function Home() {
                 {t("heroSubhead")}
               </motion.p>
 
-              <motion.div variants={sectionReveal} className="mt-8 flex flex-wrap gap-4">
+              <motion.div variants={sectionReveal} className="mt-8 flex flex-wrap gap-3 sm:gap-4">
                 <Link
                   href="/register"
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(15,23,42,0.22)] transition-transform duration-300 hover:-translate-y-0.5 dark:bg-white dark:text-slate-950"
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_36px_rgba(15,23,42,0.2)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_rgba(15,23,42,0.26)] dark:bg-white dark:text-slate-950 dark:shadow-[0_14px_40px_rgba(255,255,255,0.12)] dark:hover:shadow-[0_18px_48px_rgba(255,255,255,0.18)]"
                 >
                   {t("startFree")}
                   <span className="material-symbols-outlined text-base">arrow_forward</span>
                 </Link>
                 <Link
                   href="/dashboard"
-                  className="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white/60 px-6 py-3 text-sm font-semibold text-slate-700 backdrop-blur transition-colors hover:border-slate-400 hover:text-slate-950 dark:border-white/15 dark:bg-white/5 dark:text-slate-100 dark:hover:border-white/30"
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-300/90 bg-white/85 px-6 py-3 text-sm font-semibold text-slate-800 backdrop-blur-md transition-colors hover:border-slate-400 hover:text-slate-950 dark:border-white/18 dark:bg-slate-950/40 dark:text-slate-100 dark:hover:border-white/35"
                 >
                   {t("openDashboard")}
                 </Link>
               </motion.div>
 
-              <motion.div variants={sectionReveal} className="mt-10 grid gap-3">
+              <motion.ul
+                variants={sectionReveal}
+                className="mt-10 max-w-lg space-y-3 border-l border-slate-300/70 pl-5 dark:border-white/15"
+              >
                 {heroSignals.map((signal) => (
-                  <div
-                    key={signal}
-                    className="grid grid-cols-[16px_minmax(0,1fr)] items-start gap-3 rounded-[1.2rem] border border-slate-200/80 bg-white/68 px-4 py-3 text-sm leading-6 text-slate-600 shadow-[0_14px_32px_rgba(148,163,184,0.1)] backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:shadow-none"
-                  >
-                    <span className="mt-1.5 h-2.5 w-2.5 rounded-full bg-[linear-gradient(135deg,#22d3ee_0%,#315efb_100%)]" />
-                    <span>{signal}</span>
-                  </div>
+                  <li key={signal} className="flex gap-3 text-sm leading-7 text-slate-700 dark:text-slate-200">
+                    <span
+                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[linear-gradient(135deg,#22d3ee_0%,#315efb_100%)]"
+                      aria-hidden
+                    />
+                    {signal}
+                  </li>
                 ))}
-              </motion.div>
+              </motion.ul>
             </motion.div>
 
             <motion.div
@@ -145,13 +151,13 @@ export default function Home() {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ duration: 0.75, ease: "easeOut", delay: 0.12 }}
               style={{ y: heroSceneY, rotate: heroSceneRotate, scale: heroSceneScale }}
-              className="relative lg:mt-[5.75rem] lg:self-start lg:pl-4"
+              className="relative z-10 lg:mt-[5.75rem] lg:self-start lg:pl-4"
             >
-              <div className="absolute -inset-8 rounded-[2.8rem] bg-[radial-gradient(circle,rgba(56,189,248,0.22),rgba(56,189,248,0)_68%)] blur-2xl" />
-              <div className="relative overflow-hidden rounded-[2.25rem] border border-white/65 bg-[linear-gradient(160deg,rgba(255,255,255,0.82),rgba(239,246,255,0.56))] shadow-[0_35px_90px_rgba(15,23,42,0.18)] backdrop-blur-xl dark:border-white/10 dark:bg-[linear-gradient(160deg,rgba(12,18,34,0.78),rgba(10,20,40,0.62))] dark:shadow-[0_35px_90px_rgba(2,6,23,0.65)]">
+              <div className="absolute -inset-8 rounded-[2.8rem] bg-[radial-gradient(circle,rgba(56,189,248,0.18),rgba(56,189,248,0)_70%)] blur-2xl dark:bg-[radial-gradient(circle,rgba(56,189,248,0.14),rgba(56,189,248,0)_68%)]" />
+              <div className="relative overflow-hidden rounded-[2.25rem] border border-white/80 bg-[linear-gradient(165deg,rgba(255,255,255,0.9),rgba(241,248,255,0.62))] shadow-[0_28px_80px_rgba(15,23,42,0.16)] backdrop-blur-xl dark:border-white/12 dark:bg-[linear-gradient(165deg,rgba(10,16,30,0.82),rgba(8,18,38,0.68))] dark:shadow-[0_32px_88px_rgba(2,6,23,0.55)]">
                 <div className="relative min-h-[440px] overflow-hidden sm:min-h-[600px]">
                   <LandingHeroScene />
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_65%_40%,rgba(34,211,238,0.18),transparent_22%),radial-gradient(circle_at_25%_20%,rgba(49,94,251,0.18),transparent_26%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] dark:bg-[radial-gradient(circle_at_65%_40%,rgba(34,211,238,0.2),transparent_24%),radial-gradient(circle_at_25%_20%,rgba(49,94,251,0.2),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0))]" />
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_62%_38%,rgba(34,211,238,0.14),transparent_26%),radial-gradient(circle_at_22%_18%,rgba(49,94,251,0.14),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0.02))] dark:bg-[radial-gradient(circle_at_62%_38%,rgba(34,211,238,0.16),transparent_28%),radial-gradient(circle_at_22%_18%,rgba(49,94,251,0.16),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0))]" />
 
                   <div className="absolute left-5 top-5 right-5 flex flex-wrap items-start justify-between gap-3 sm:left-6 sm:top-6 sm:right-6">
                     <div className="rounded-full border border-white/75 bg-white/78 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-slate-700 shadow-[0_14px_36px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-slate-100 dark:shadow-[0_20px_50px_rgba(2,6,23,0.45)]">
